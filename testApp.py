@@ -3,8 +3,8 @@ import socket, OSC, re, time, threading, math
 import numpy as np
 import matplotlib.pyplot as plt
 
-OSC_addr_cli = '127.0.0.1', 5002
-OSC_addr_srv = '127.0.0.1', 5001
+OSC_addr_cli = '127.0.0.1', 5001
+OSC_addr_srv = '127.0.0.1', 5002
 s = OSC.OSCServer(OSC_addr_srv)
 c = OSC.OSCClient()
 c.connect(OSC_addr_cli)
@@ -12,7 +12,7 @@ s.addDefaultHandlers()
 
 table = [list(),list(),list(),list()]
 fig = plt.figure()
-ax = plt.axes(xlim=(0, 50), ylim=(0, 2000))
+plt.ion()
 
 def genHandler(addr, tags, stuff, source):
     if addr == "/muse/eeg":
@@ -47,7 +47,6 @@ def info(addr, tags, stuff, source):
     pass
 
 def splitEEG(data):
-    plt.figure(1) # which plot updating
     subPlot = 410
     for i in range(4):
         subPlot += 1
@@ -57,8 +56,10 @@ def splitEEG(data):
         else:
             table[i] = table[i] + [data[i]]
         plt.cla()
+        plt.xlim(0,50)
+        plt.ylim(min(table[i]), max(table[i])+1)
         plt.plot(table[i])
-
+        plt.draw()
 
 s.addMsgHandler("/muse/eeg", genHandler)
 s.addMsgHandler("/muse/acc", genHandler)
@@ -79,11 +80,11 @@ st.start()
  
  # Loop while threads are running.
 try:
-    # Show screeen
-    plt.show()
     # from here random input to the Bluetooth device will cause the msgHandler to get called and update the screen.
     # from inside splitEEG
-
+    plt.show()
+    while 1:
+        pass
 except TypeError:
     print "oops"
     exit(0)

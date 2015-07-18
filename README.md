@@ -1,4 +1,3 @@
-MusePyOSC
 =========
 *OSC data for Muse through muse-io*
 
@@ -8,4 +7,4 @@ MusePyOSC
 4. source venv/bin/activate * make sure python2 *
 5. pip install -r requirements.txt
 6. ./testApp.py
-
+> 
