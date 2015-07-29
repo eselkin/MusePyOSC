@@ -5,8 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 from pylab import *
 from mpl_toolkits.mplot3d import Axes3D
-from requests import *
-lastClock = clock()
+import requests
 
 OSC_addr_cli = '127.0.0.1', 5001
 OSC_addr_srv = '127.0.0.1', 5002 # 5002 prior
@@ -78,19 +77,15 @@ def splitEEG(data):
     line3.append(data[2])
     line4.append(data[3])
     lineCount.append(lineCount[-1] + 1)
-    if lineCount[-1] > 100:
-        avgLast20 = np.mean(line1[-20:-1])
-        avgPrev80 = np.mean(line1[-100:-20])
-        if avgLast20 > avgPrev80 + 100:
-            signalAction(0)
-        if avgLast20 < avgPrev80 - 100:
-            signalAction(1)
-
+    if lineCount[-1] > 120:
+        avgLast40 = np.mean(line1[-40:-1])
+        avgPrev80 = np.mean(line1[-120:-40])
+        if avgLast40 > (avgPrev80 + 200):
+           signalAction(0)
+        if avgLast40 < (avgPrev80 - 200):
+           signalAction(1)
 
 def signalAction(i):
-    if time.clock() - lastClock <= 3000:
-        return
-    lastClock = time.clock()
     if i == 0:
         r = requests.get('http://127.0.0.1:5000/on')
     if i == 0:
