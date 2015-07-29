@@ -6,7 +6,7 @@ import matplotlib.animation as animation
 from pylab import *
 from mpl_toolkits.mplot3d import Axes3D
 from requests import *
-
+lastClock = clock()
 
 OSC_addr_cli = '127.0.0.1', 5001
 OSC_addr_srv = '127.0.0.1', 5002 # 5002 prior
@@ -88,6 +88,9 @@ def splitEEG(data):
 
 
 def signalAction(i):
+    if time.clock() - lastClock <= 3000:
+        return
+    lastClock = time.clock()
     if i == 0:
         r = requests.get('http://127.0.0.1:5000/on')
     if i == 0:
@@ -153,7 +156,7 @@ try:
         # splitACC(listy2)
     pass
 except AssertionError as err:
-    print "hello ELI", str(err)
+    print "hello", str(err)
 
 except TypeError:
     print "oops"
