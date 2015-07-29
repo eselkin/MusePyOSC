@@ -78,11 +78,11 @@ def splitEEG(data):
     line4.append(data[3])
     lineCount.append(lineCount[-1] + 1)
     if lineCount[-1] > 120:
-        avgLast40 = np.mean(line1[-40:-1])
-        avgPrev80 = np.mean(line1[-120:-40])
-        if avgLast40 > (avgPrev80 + 200):
+        avgLast40 = np.mean(line2[-40:-1])
+        avgPrev80 = np.mean(line2[-120:-40])
+        if avgLast40 > (avgPrev80 + 150):
            signalAction(0)
-        if avgLast40 < (avgPrev80 - 200):
+        if avgLast40 < (avgPrev80 - 150):
            signalAction(1)
 
 def signalAction(i):
@@ -137,19 +137,11 @@ st = threading.Thread( target = s.serve_forever )
 st.start()
 
 # Loop while threads are running.
-ani = animation.FuncAnimation(fig, animateGraphs, interval = 250)
+ani = animation.FuncAnimation(fig, animateGraphs, interval = 20)
 plt.show()
 try:
-    # while 1:
-    #     listy = []
-    #     for i in range(4):
-    #          listy.append(randint(-100, 100))
-    #     splitEEG(listy)
-    #     # listy2 = []
-        # for i in range(3):
-        #     listy2.append(randint(-20,20))
-        # splitACC(listy2)
-    pass
+    while 1:
+        pass
 except AssertionError as err:
     print "hello", str(err)
 
